@@ -61,4 +61,4 @@ To run follow these steps from the root directory:
 
 To run tests run `yarn test`
 
-App supports displaying data, filtering data by fields, searching a player's name, sorting data by fields and exporting data subsets to a CSV.
+App supports displaying data, filtering data by fields, searching a player's name, sorting data by fields and exporting data subsets to a CSV. Used https://github.com/minimal-ui-kit/material-kit-react as a template for the Front-end.
