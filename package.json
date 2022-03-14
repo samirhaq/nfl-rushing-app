@@ -1,0 +1,16 @@
+{
+    "name": "nfl-rushing-api",
+    "version": "1.3.0",
+    "license": "MIT",
+    "scripts": {
+      "install": "cd backend && yarn && cd ../frontend yarn",
+      "start": "cd backend && yarn servers",
+      "dev": "cd backend && yarn servers",
+      "create-db": "cd backend && yarn create-db",
+      "seed": "cd backend && yarn seed",
+      "test": "cd backend && jest --coverage"
+    },
+    "dependencies": {
+    }
+  }
+  
