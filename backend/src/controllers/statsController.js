@@ -4,34 +4,29 @@ exports.getIndex = (req, res) => {
     res.send('Rushing Yards Home Route');
 };
 
-exports.getStats = (req, res) => {
-    Stat.fetchAll((stats) => {
-        res.json(stats);
-    });
+exports.getStats = async (req, res) => {
+    const stats = await Stat.fetchAll();
+    res.json(stats);
 };
 
-exports.getTeams = (req, res) => {
-    Stat.fetchTeams((teams) => {
-        res.json(teams);
-    });
+exports.getTeams = async (req, res) => {
+    const teams = await Stat.fetchTeams();
+    res.json(teams);
 };
 
-exports.getPositions = (req, res) => {
-    Stat.fetchPositions((positions) => {
-        res.json(positions);
-    });
+exports.getPositions = async (req, res) => {
+    const positions = await Stat.fetchPositions();
+    res.json(positions);
 };
 
-exports.getPlayer = (req, res) => {
+exports.getPlayer = async (req, res) => {
     const playerId = req.params.playerId;
 
-    Stat.findById(playerId, (player) => {
-        res.json(player);
-    });
+    const player = await Stat.findById(playerId);
+    res.json(player);
 };
 
-exports.getStatsFiltered = (req, res) => {
-    Stat.fetchWithFilters(req.query, (stats) => {
-        res.json(stats);
-    });
+exports.getStatsFiltered = async (req, res) => {
+    const stats = await Stat.fetchWithFilters(req.query);
+    res.json(stats);
 };

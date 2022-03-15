@@ -1,4 +1,3 @@
-const { v4: uuidv4 } = require('uuid');
 const db = require('../db/db');
 const DBUtil = require('../utils/dbUtils');
 
@@ -21,56 +20,51 @@ module.exports = class Stat {
         this.fortyPlus = fortyPlus;
         this.fum = fum;
     }
-    static fetchAll(cb) {
-        db.query('SELECT * FROM RushingYards', null, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                cb(res.rows.map((stat) => this.mapToModel(stat)));
-            }
-        });
+    static async fetchAll() {
+        try {
+            const res = await db.query('SELECT * FROM RushingYards', null);
+            return res.rows.map((stat) => this.mapToModel(stat));
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
-    static findById(id, cb) {
+
+    static async findById(id, cb) {
         const query = `SELECT * FROM RushingYards WHERE id = $1`
-        db.query(query, [id], (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                cb(res.rows.map((stat) => this.mapToModel(stat)))
-            }
-        });
+        try {
+            const res = await db.query(query, [id]);
+            return res.rows.map((stat) => this.mapToModel(stat));
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
 
-    static fetchWithFilters(filters, cb) {
+    static async fetchWithFilters(filters, cb) {
         const query = DBUtil.buildQuery(`SELECT * FROM RushingYards`, filters)
-        console.log(query);
-        db.query(query, null, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                cb(res.rows.map((stat) => this.mapToModel(stat)))
-            }
-        });
+        try {
+            const res = await db.query(query, null);
+            return res.rows.map((stat) => this.mapToModel(stat));
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
 
-    static fetchTeams(cb) {
-        db.query('SELECT DISTINCT team FROM RushingYards ORDER BY team ASC', null, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                cb(res.rows.map((team) => { return team.team }))
-            }
-        });
+    static async fetchTeams() {
+        try {
+            const res = await db.query('SELECT DISTINCT team FROM RushingYards ORDER BY team ASC', null);
+            return res.rows.map((team) => { return team.team });
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
 
-    static fetchPositions(cb) {
-        db.query('SELECT DISTINCT pos FROM RushingYards ORDER BY pos ASC', null, (err, res) => {
-            if (err) {
-                console.log(err.stack);
-            } else {
-                cb(res.rows.map((pos) => { return pos.pos }))
-            }
-        });
+    static async fetchPositions() {
+        try {
+            const res = await db.query('SELECT DISTINCT pos FROM RushingYards ORDER BY pos ASC', null);
+            return res.rows.map((pos) => { return pos.pos });
+        } catch (err) {
+            console.log(err.stack);
+        }
     }
 
     static mapToModel(stat) {

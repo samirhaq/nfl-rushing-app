@@ -1,11 +1,48 @@
 const Stat = require('../src/models/Stats');
 const db = require('../src/db/db');
 
-jest.mock('../src/db/db');
-
 describe('Stats model tests', () => {
     it('fetchAll', async () => {
         
+        const mockDBData = [
+            {
+                "id": 1,
+                "player": "Joe Banyard",
+                "team": "JAX",
+                "pos": "RB",
+                "att": 2,
+                "att_g": "2",
+                "yds": 7,
+                "avg": "3.5",
+                "yds_g": "7",
+                "td": 0,
+                "lng": "7",
+                "first": 0,
+                "first_perc": "0",
+                "twenty_plus": 0,
+                "forty_plus": 0,
+                "fum": 0
+            },
+            {
+                "id": 2,
+                "player": "Shaun Hill",
+                "team": "MIN",
+                "pos": "QB",
+                "att": 5,
+                "att_g": "1.7",
+                "yds": 5,
+                "avg": "1",
+                "yds_g": "1.7",
+                "td": 0,
+                "lng": "9",
+                "first": 0,
+                "first_perc": "0",
+                "twenty_plus": 0,
+                "forty_plus": 0,
+                "fum": 0
+            }
+        ];
+
         const mockData = [
             {
                 "id": 1,
@@ -45,14 +82,66 @@ describe('Stats model tests', () => {
             }
         ];
 
-        db.query.mockReturnValue(mockData);
+        db.query = jest.fn();
+        db.query.mockResolvedValue({rows: mockDBData});
 
-        return await Stat.fetchAll(data => {
-            expect(data).toStrictEqual(mockData)
-        })
+        const data = await Stat.fetchAll();
+
+        expect(data).toStrictEqual(mockData)
+        expect(db.query).toHaveBeenCalledTimes(1);
     });
 
-    it('fetchAllWithFilters', async () => {
+    it('fetchAll - Error', async () => {
+
+        db.query = jest.fn();
+        db.query.mockRejectedValue(new Error("DB failed"));
+
+        const data = await Stat.fetchAll();
+
+        expect(data).toStrictEqual()
+        expect(db.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetchWithFilters', async () => {
+
+        const mockDBData = [
+            {
+                "id": 1,
+                "player": "Joe Banyard",
+                "team": "JAX",
+                "pos": "RB",
+                "att": 2,
+                "att_g": "2",
+                "yds": 7,
+                "avg": "3.5",
+                "yds_g": "7",
+                "td": 0,
+                "lng": "7",
+                "first": 0,
+                "first_perc": "0",
+                "twenty_plus": 0,
+                "forty_plus": 0,
+                "fum": 0
+            },
+            {
+                "id": 18,
+                "player": "Denard Robinson",
+                "team": "JAX",
+                "pos": "RB",
+                "att": 41,
+                "att_g": "3.2",
+                "yds": 144,
+                "avg": "3.5",
+                "yds_g": "11.1",
+                "td": 0,
+                "lng": "9",
+                "first": 4,
+                "first_perc": "9.8",
+                "twenty_plus": 0,
+                "forty_plus": 0,
+                "fum": 0
+            }
+        ];
         
         const mockData = [
             {
@@ -93,17 +182,50 @@ describe('Stats model tests', () => {
             }
         ];
 
-        db.query.mockReturnValue(mockData);
+        db.query = jest.fn();
+        db.query.mockResolvedValue({rows: mockDBData});
 
-        return await Stat.fetchWithFilters(data => {
-            expect(data).toStrictEqual(mockData)
-        })
+        const data = await Stat.fetchWithFilters({team: "='JAX'"});
+
+        expect(data).toStrictEqual(mockData);
+        expect(db.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetchWithFilters - Error', async () => {
+
+        db.query = jest.fn();
+        db.query.mockRejectedValue(new Error("DB failed"));
+
+        const data = await Stat.fetchWithFilters({team: "='JAX'"});
+
+        expect(data).toStrictEqual()
+        expect(db.query).toHaveBeenCalledTimes(1);
     });
     
     it('findById', async () => {
+
+        const mockDBData =
+            [{
+                "id": 1,
+                "player": "Joe Banyard",
+                "team": "JAX",
+                "pos": "RB",
+                "att": 2,
+                "att_g": "2",
+                "yds": 7,
+                "avg": "3.5",
+                "yds_g": "7",
+                "td": 0,
+                "lng": "7",
+                "first": 0,
+                "first_perc": "0",
+                "twenty_plus": 0,
+                "forty_plus": 0,
+                "fum": 0
+            }];
         
         const mockData =
-            {
+            [{
                 "id": 1,
                 "player": "Joe Banyard",
                 "team": "JAX",
@@ -120,35 +242,75 @@ describe('Stats model tests', () => {
                 "twentyPlus": 0,
                 "fortyPlus": 0,
                 "fum": 0
-            };
+            }];
 
-        db.query.mockReturnValue(mockData);
+        db.query = jest.fn();
+        db.query.mockResolvedValue({rows: mockDBData});
 
-        return await Stat.findById(1, (data) => {
-            expect(data).toStrictEqual(mockData)
-        })
+        const data = await Stat.findById(1);
+        expect(data).toStrictEqual(mockData);
+        expect(db.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('findById - Error', async () => {
+
+        db.query = jest.fn();
+        db.query.mockRejectedValue(new Error("DB failed"));
+
+        const data = await Stat.findById(3);
+
+        expect(data).toStrictEqual()
+        expect(db.query).toHaveBeenCalledTimes(1);
     });
 
     it('fetchTeams', async () => {
+
+        const mockDBData = [{"team": "ARI"}, {"team":"ATL"}, {"team":"BAL"}];
         
         const mockData = ["ARI", "ATL", "BAL"];
 
-        db.query.mockReturnValue(mockData);
+        db.query = jest.fn();
+        db.query.mockResolvedValue({rows: mockDBData});
 
-        return await Stat.fetchTeams(data => {
-            expect(data).toStrictEqual(mockData)
-        })
+        const data = await Stat.fetchTeams();
+        expect(data).toStrictEqual(mockData);
+        expect(db.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetchTeams - Error', async () => {
+
+        db.query = jest.fn();
+        db.query.mockRejectedValue(new Error("DB failed"));
+
+        const data = await Stat.fetchTeams();
+
+        expect(data).toStrictEqual()
+        expect(db.query).toHaveBeenCalledTimes(1);
     });
 
     it('fetchPositions', async () => {
-        
+
         const mockData = ["QB", "RB", "WR"];
+        
+        const mockDBData = [{"pos":"QB"}, {"pos":"RB"},{"pos": "WR"}];
 
-        db.query.mockReturnValue(mockData);
+        db.query = jest.fn();
+        db.query.mockResolvedValue({rows: mockDBData});
 
-        return await Stat.fetchPositions(data => {
-            expect(data).toStrictEqual(mockData)
-        })
+        const data = await Stat.fetchPositions();
+        expect(data).toStrictEqual(mockData);
+        expect(db.query).toHaveBeenCalledTimes(1);
+    });
+
+    it('fetchPositions - Error', async () => {
+
+        db.query = jest.fn();
+        db.query.mockRejectedValue(new Error("DB failed"));
+
+        const data = await Stat.fetchPositions();
+
+        expect(data).toStrictEqual()
+        expect(db.query).toHaveBeenCalledTimes(1);
     });
 
     it('mapToModel', async () => {
