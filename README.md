@@ -63,12 +63,14 @@ To initialize db
 If you want to import new data, upload to `src/db/data` and run steps to initialize again. Make sure it is in the correct format or it will not import
 
 To run app make sure docker is installed:
-Run `docker-compose up --build`
+1. Run `docker-compose up --build`
+2. Visit localhost:3050
 
 To run without docker:
 1. cd to the root directory `nfl-rushing-app`
 2. `yarn install`
 3. `yarn start`
+4. Visit localhost:3000
 
 To run tests run `yarn test --coverage`
 
