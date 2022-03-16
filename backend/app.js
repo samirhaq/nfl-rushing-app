@@ -11,4 +11,4 @@ app.use('/', statsRouter);
 
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => console.log(`Server running on port ${port}, http://localhost:${port}`));
+app.listen('3001', () => { })

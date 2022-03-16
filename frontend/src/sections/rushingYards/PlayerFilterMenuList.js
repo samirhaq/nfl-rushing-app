@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MenuItem, InputLabel, Select, FormControl, TextField } from '@mui/material';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 
 // ----------------------------------------------------------------------
 PlayerFilterMenuList.propTypes = {
@@ -29,18 +30,20 @@ export default function PlayerFilterMenuList({
   }, []);
 
   const getAPI = () => {
-    const teamsCall = 'http://localhost:8000/teams';
+    const teamsCall = 'api/teams';
 
-    fetch(teamsCall)
-      .then((response) => response.json())
+    axios
+      .get(teamsCall)
+      .then((response) => response.data)
       .then((data) => {
         setTeams(data);
       });
 
-    const positionsCall = 'http://localhost:8000/positions';
+    const positionsCall = 'api/positions';
 
-    fetch(positionsCall)
-      .then((response) => response.json())
+    axios
+      .get(positionsCall)
+      .then((response) => response.data)
       .then((data) => {
         setPositions(data);
       });

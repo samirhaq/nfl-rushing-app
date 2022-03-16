@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "nodemon app.js",
-    "servers": "concurrently \"npm run start\" \"cd ../frontend && yarn start\"",
+    "servers": "concurrently \"yarn start\" \"cd ../frontend && yarn start\"",
     "create-db": "psql -h ziggy.db.elephantsql.com -U qenjffkg -d qenjffkg < src/db/schema.sql",
     "migrate": "yarn create-db && Node src/db/data_import.js",
     "test": "jest --coverage"

@@ -2,6 +2,9 @@ const db = require('./db');
 const path = require('path');
 const data = require(path.join(`${__dirname}/data/rushing.json`));
 
+// Script to parse and import data from json file
+
+// Build bulk insewrt query
 var query = `INSERT INTO RushingYards (id, player, team, pos, att, att_g, yds, avg, yds_g, td, lng, is_td, first, first_perc, twenty_plus, forty_plus, fum) VALUES `;
 var id = 1
 for (const entry of data) {
@@ -27,8 +30,10 @@ for (const entry of data) {
     id += 1
 }
 
+// Remove last comma
 query = query.substring(0, query.length - 1);
 
+// Connect to db and run query
 db.connect((err, client, done) => {
     if (err) throw err;
     try {

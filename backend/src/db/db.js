@@ -10,6 +10,7 @@ const pool = new Pool({
     port
 });
 
+// DB methods
 module.exports = {
     query: (text, params, callback) => {
         return pool.query(text, params, callback);

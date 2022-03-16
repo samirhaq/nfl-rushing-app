@@ -12,19 +12,20 @@ import NotFound from './pages/Page404';
 export default function Router() {
   return useRoutes([
     {
-      path: '/dashboard',
+      path: '/',
       element: <DashboardLayout />,
-      children: [{ path: 'rushingyards', element: <RushingYards /> }]
+      children: [
+        { path: 'rushingyards', element: <RushingYards /> },
+        { path: '/', element: <Navigate to="/rushingyards" /> }
+      ]
     },
     {
-      path: '/',
+      path: '*',
       element: <LogoOnlyLayout />,
       children: [
-        { path: '/', element: <Navigate to="/dashboard/rushingyards" /> },
         { path: '404', element: <NotFound /> },
         { path: '*', element: <Navigate to="/404" /> }
       ]
-    },
-    { path: '*', element: <Navigate to="/404" replace /> }
+    }
   ]);
 }

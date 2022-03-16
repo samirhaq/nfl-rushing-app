@@ -1,6 +1,7 @@
 import { filter } from 'lodash';
 import { useState, useEffect } from 'react';
 import { CSVLink } from 'react-csv';
+import axios from 'axios';
 
 // material
 import {
@@ -50,6 +51,7 @@ const nonStats = ['player', 'team', 'pos'];
 
 // ----------------------------------------------------------------------
 
+// Compare strings
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -60,6 +62,7 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
+// Compare numbers
 function descendingNumericComparator(a, b, orderBy) {
   if (Number(b[orderBy]) > Number(a[orderBy])) {
     return -1;
@@ -116,16 +119,19 @@ export default function RushingYards() {
 
   const handleAddFilter = () => {
     let value = fieldValue;
+    // Make value into a string for later query building
     if (field === 'pos' || field === 'team') {
       value = `'${fieldValue}'`;
     }
     const filter = { field, operation, value };
     filters.push(filter);
     setFilters(filters);
+    // Call the API with new filters
     getAPI();
   };
 
   const handleDeleteFilter = (event) => {
+    // Delete current index out of filters
     filters.splice(event.currentTarget.value, 1);
     setFilters(filters);
     getAPI();
@@ -133,6 +139,7 @@ export default function RushingYards() {
 
   const handleChangeField = (event) => {
     setField(event.target.value);
+    // Reset value back to default when field changes
     if (event.target.value === 'team') {
       setValue('ATL');
     } else if (event.target.value === 'pos') {
@@ -173,7 +180,8 @@ export default function RushingYards() {
   const getAPI = () => {
     let url = '';
     if (filters.length > 0) {
-      url = `http://localhost:8000/stats?`;
+      url = `api/stats?`;
+      // Convert field names to camel case for db query building
       filters.map((filter) => {
         const dbField = filter.field.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
         url += `${dbField}=${filter.operation}${filter.value}&`;
@@ -181,11 +189,12 @@ export default function RushingYards() {
       });
       url = url.substring(0, url.length - 1);
     } else {
-      url = 'http://localhost:8000/stats';
+      url = 'api/stats';
     }
 
-    fetch(url)
-      .then((response) => response.json())
+    axios
+      .get(url)
+      .then((response) => response.data)
       .then((data) => {
         setLoading(true);
         setData(data);

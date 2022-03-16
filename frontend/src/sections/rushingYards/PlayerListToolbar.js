@@ -92,6 +92,10 @@ export default function PlayerListToolbar({
         />
       )}
 
+      <Typography component="div" variant="caption">
+        * Green longest rush converted to Touchdown
+      </Typography>
+
       {numSelected > 0 ? (
         <Tooltip title="Delete">
           <IconButton>
