@@ -6,8 +6,7 @@
       "install": "cd backend && yarn && cd ../frontend yarn",
       "start": "cd backend && yarn servers",
       "dev": "cd backend && yarn servers",
-      "create-db": "cd backend && yarn create-db",
-      "seed": "cd backend && yarn seed",
+      "migrate": "cd backend && yarn migrate",
       "test": "cd backend && jest --coverage"
     },
     "dependencies": {

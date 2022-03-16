@@ -19,4 +19,11 @@ describe('DB utilities tests', () => {
             "testParam2":"< 3"
         })).toStrictEqual("SELECT * FROM test WHERE testParam1 = 'testValue1' AND testParam2 < 3");
     })
+
+    it('buildQuery - Multiple same field params', async () => {
+        const query = "SELECT * FROM test";
+        expect(DBUtil.buildQuery(query, {
+            "testParam": [">= 5", "< 3"]
+        })).toStrictEqual("SELECT * FROM test WHERE testParam >= 5 AND testParam < 3");
+    })
 })

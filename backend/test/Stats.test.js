@@ -17,6 +17,7 @@ describe('Stats model tests', () => {
                 "yds_g": "7",
                 "td": 0,
                 "lng": "7",
+                "is_td": false,
                 "first": 0,
                 "first_perc": "0",
                 "twenty_plus": 0,
@@ -35,6 +36,7 @@ describe('Stats model tests', () => {
                 "yds_g": "1.7",
                 "td": 0,
                 "lng": "9",
+                "is_td": true,
                 "first": 0,
                 "first_perc": "0",
                 "twenty_plus": 0,
@@ -56,6 +58,7 @@ describe('Stats model tests', () => {
                 "ydsG": "7",
                 "td": 0,
                 "lng": "7",
+                "isTd": false,
                 "first": 0,
                 "firstPerc": "0",
                 "twentyPlus": 0,
@@ -74,6 +77,7 @@ describe('Stats model tests', () => {
                 "ydsG": "1.7",
                 "td": 0,
                 "lng": "9",
+                "isTd": true,
                 "first": 0,
                 "firstPerc": "0",
                 "twentyPlus": 0,
@@ -96,9 +100,7 @@ describe('Stats model tests', () => {
         db.query = jest.fn();
         db.query.mockRejectedValue(new Error("DB failed"));
 
-        const data = await Stat.fetchAll();
-
-        expect(data).toStrictEqual()
+        expect(Stat.fetchAll()).rejects.toThrow("DB failed");
         expect(db.query).toHaveBeenCalledTimes(1);
     });
 
@@ -117,6 +119,7 @@ describe('Stats model tests', () => {
                 "yds_g": "7",
                 "td": 0,
                 "lng": "7",
+                "is_td": false,
                 "first": 0,
                 "first_perc": "0",
                 "twenty_plus": 0,
@@ -135,6 +138,7 @@ describe('Stats model tests', () => {
                 "yds_g": "11.1",
                 "td": 0,
                 "lng": "9",
+                "is_td": false,
                 "first": 4,
                 "first_perc": "9.8",
                 "twenty_plus": 0,
@@ -156,6 +160,7 @@ describe('Stats model tests', () => {
                 "ydsG": "7",
                 "td": 0,
                 "lng": "7",
+                "isTd": false,
                 "first": 0,
                 "firstPerc": "0",
                 "twentyPlus": 0,
@@ -174,6 +179,7 @@ describe('Stats model tests', () => {
                 "ydsG": "11.1",
                 "td": 0,
                 "lng": "9",
+                "isTd": false,
                 "first": 4,
                 "firstPerc": "9.8",
                 "twentyPlus": 0,
@@ -196,9 +202,7 @@ describe('Stats model tests', () => {
         db.query = jest.fn();
         db.query.mockRejectedValue(new Error("DB failed"));
 
-        const data = await Stat.fetchWithFilters({team: "='JAX'"});
-
-        expect(data).toStrictEqual()
+        expect(Stat.fetchWithFilters({team: "='JAX'"})).rejects.toThrow("DB failed");
         expect(db.query).toHaveBeenCalledTimes(1);
     });
     
@@ -217,6 +221,7 @@ describe('Stats model tests', () => {
                 "yds_g": "7",
                 "td": 0,
                 "lng": "7",
+                "is_td": false,
                 "first": 0,
                 "first_perc": "0",
                 "twenty_plus": 0,
@@ -237,6 +242,7 @@ describe('Stats model tests', () => {
                 "ydsG": "7",
                 "td": 0,
                 "lng": "7",
+                "isTd": false,
                 "first": 0,
                 "firstPerc": "0",
                 "twentyPlus": 0,
@@ -257,9 +263,7 @@ describe('Stats model tests', () => {
         db.query = jest.fn();
         db.query.mockRejectedValue(new Error("DB failed"));
 
-        const data = await Stat.findById(3);
-
-        expect(data).toStrictEqual()
+        expect(Stat.findById(3)).rejects.toThrow("DB failed");
         expect(db.query).toHaveBeenCalledTimes(1);
     });
 
@@ -282,9 +286,7 @@ describe('Stats model tests', () => {
         db.query = jest.fn();
         db.query.mockRejectedValue(new Error("DB failed"));
 
-        const data = await Stat.fetchTeams();
-
-        expect(data).toStrictEqual()
+        expect(Stat.fetchTeams()).rejects.toThrow("DB failed");
         expect(db.query).toHaveBeenCalledTimes(1);
     });
 
@@ -307,9 +309,7 @@ describe('Stats model tests', () => {
         db.query = jest.fn();
         db.query.mockRejectedValue(new Error("DB failed"));
 
-        const data = await Stat.fetchPositions();
-
-        expect(data).toStrictEqual()
+        expect(Stat.fetchPositions()).rejects.toThrow("DB failed");
         expect(db.query).toHaveBeenCalledTimes(1);
     });
 
@@ -327,6 +327,7 @@ describe('Stats model tests', () => {
             "ydsG": "7",
             "td": 0,
             "lng": "7",
+            "isTd": false,
             "first": 0,
             "firstPerc": "0",
             "twentyPlus": 0,
@@ -346,6 +347,7 @@ describe('Stats model tests', () => {
             "yds_g": "7",
             "td": 0,
             "lng": "7",
+            "is_td": false,
             "first": 0,
             "first_perc": "0",
             "twenty_plus": 0,
@@ -370,6 +372,7 @@ describe('Stats model tests', () => {
             "ydsG": "7",
             "td": 0,
             "lng": "7",
+            "isTd": false,
             "first": 0,
             "firstPerc": "0",
             "twentyPlus": 0,
@@ -377,7 +380,7 @@ describe('Stats model tests', () => {
             "fum": 0
         };
 
-        const statModel = new Stat(1, "Joe Banyard", "JAX", "RB", 2, "2", 7, "3.5", "7", 0, "7", 0, "0", 0, 0, 0);
+        const statModel = new Stat(1, "Joe Banyard", "JAX", "RB", 2, "2", 7, "3.5", "7", 0, "7", false, 0, "0", 0, 0, 0);
         
         expect(statModel).toEqual(mockData)
     });

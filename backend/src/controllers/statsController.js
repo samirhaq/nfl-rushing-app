@@ -5,28 +5,48 @@ exports.getIndex = (req, res) => {
 };
 
 exports.getStats = async (req, res) => {
-    const stats = await Stat.fetchAll();
-    res.json(stats);
+    try {
+        const stats = await Stat.fetchAll();
+        res.json(stats);
+    } catch (err) {
+        console.log(err.stack);
+    }
 };
 
 exports.getTeams = async (req, res) => {
-    const teams = await Stat.fetchTeams();
-    res.json(teams);
+    try {
+        const teams = await Stat.fetchTeams();
+        res.json(teams);
+    } catch (err) {
+        console.log(err.stack);
+    }
 };
 
 exports.getPositions = async (req, res) => {
-    const positions = await Stat.fetchPositions();
-    res.json(positions);
+    try {
+        const positions = await Stat.fetchPositions();
+        res.json(positions);
+    } catch (err) {
+        console.log(err.stack);
+    }
 };
 
 exports.getPlayer = async (req, res) => {
     const playerId = req.params.playerId;
 
-    const player = await Stat.findById(playerId);
-    res.json(player);
+    try {
+        const player = await Stat.findById(playerId);
+        res.json(player);
+    } catch (err) {
+        console.log(err.stack);
+    }
 };
 
 exports.getStatsFiltered = async (req, res) => {
-    const stats = await Stat.fetchWithFilters(req.query);
-    res.json(stats);
+    try {
+        const stats = await Stat.fetchWithFilters(req.query);
+        res.json(stats);
+    } catch (err) {
+        console.log(err.stack);
+    }
 };

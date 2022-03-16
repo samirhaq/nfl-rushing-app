@@ -22,14 +22,14 @@ export default function PlayerFilterMenuList({
 }) {
   const [positions, setPositions] = useState([]);
   const [teams, setTeams] = useState([]);
-  const nonStats = ['pos', 'team'];
+  const nonStats = ['pos', 'team', 'isTd'];
 
   useEffect(() => {
     getAPI();
   }, []);
 
   const getAPI = () => {
-    const teamsCall = 'http://localhost:8080/teams';
+    const teamsCall = 'http://localhost:8000/teams';
 
     fetch(teamsCall)
       .then((response) => response.json())
@@ -37,7 +37,7 @@ export default function PlayerFilterMenuList({
         setTeams(data);
       });
 
-    const positionsCall = 'http://localhost:8080/positions';
+    const positionsCall = 'http://localhost:8000/positions';
 
     fetch(positionsCall)
       .then((response) => response.json())
@@ -66,6 +66,7 @@ export default function PlayerFilterMenuList({
           <MenuItem value="ydsG">Yards/Game</MenuItem>
           <MenuItem value="td">Touchdowns</MenuItem>
           <MenuItem value="lng">Longest Rush</MenuItem>
+          <MenuItem value="isTd">Longest Rush Touchdown</MenuItem>
           <MenuItem value="first">First Downs</MenuItem>
           <MenuItem value="firstPerc">First Down %</MenuItem>
           <MenuItem value="twentyPlus">Twenty+ Yards Each</MenuItem>
@@ -127,6 +128,21 @@ export default function PlayerFilterMenuList({
               {positions.map((position) => (
                 <MenuItem value={position}>{position}</MenuItem>
               ))}
+            </Select>
+          </>
+        )}
+        {nonStats.includes(field) && field === 'isTd' && (
+          <>
+            <InputLabel id="field-select-label">Value</InputLabel>
+            <Select
+              labelId="value-select-label"
+              id="value-select"
+              value={fieldValue}
+              label="Value"
+              onChange={handleChangeValue}
+            >
+              <MenuItem value>Yes</MenuItem>
+              <MenuItem value={false}>No</MenuItem>
             </Select>
           </>
         )}

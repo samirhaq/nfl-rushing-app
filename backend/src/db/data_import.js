@@ -2,7 +2,7 @@ const db = require('./db');
 const path = require('path');
 const data = require(path.join(`${__dirname}/data/rushing.json`));
 
-var query = `INSERT INTO RushingYards (id, player, team, pos, att, att_g, yds, avg, yds_g, td, lng, first, first_perc, twenty_plus, forty_plus, fum) VALUES `;
+var query = `INSERT INTO RushingYards (id, player, team, pos, att, att_g, yds, avg, yds_g, td, lng, is_td, first, first_perc, twenty_plus, forty_plus, fum) VALUES `;
 var id = 1
 for (const entry of data) {
     query += "("
@@ -16,7 +16,8 @@ for (const entry of data) {
     query += entry["Avg"] + ", "
     query += entry["Yds/G"] + ", "
     query += entry["TD"] + ", "
-    query += "\'" + entry["Lng"] + "\', "
+    query += (typeof entry["Lng"] === "string" && entry["Lng"].slice(-1) === 'T' ? parseInt(entry["Lng"]) : parseInt(entry["Lng"])) + ","
+    query += (typeof entry["Lng"] === "string" && entry["Lng"].slice(-1) === 'T' ? true : false) +  ","
     query += entry["1st"] + ", "
     query += entry["1st%"] + ", "
     query += entry["20+"] + ", "

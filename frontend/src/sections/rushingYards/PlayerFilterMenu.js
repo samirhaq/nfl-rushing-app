@@ -54,10 +54,7 @@ export default function PlayerFilterMenu({
         {filters.length > 0 &&
           filters.map((filter, index) => (
             <MenuItem>
-              <ListItemText
-                primary={`${filter.field} ${filter.operation} ${filter.value}`}
-                primaryTypographyProps={{ variant: 'body2' }}
-              />
+              <ListItemText primary={`${filter.field} ${filter.operation} ${filter.value}`} />
               <ListItemIcon>
                 <IconButton value={index} onClick={handleDeleteFilter}>
                   <Iconify icon="eva:trash-2-outline" width={24} height={24} />

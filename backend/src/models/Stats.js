@@ -2,7 +2,7 @@ const db = require('../db/db');
 const DBUtil = require('../utils/dbUtils');
 
 module.exports = class Stat {
-    constructor(id, player, team, pos, att, attG, yds, avg, ydsG, td, lng, first, firstPerc, twentyPlus, fortyPlus, fum) {
+    constructor(id, player, team, pos, att, attG, yds, avg, ydsG, td, lng, isTd, first, firstPerc, twentyPlus, fortyPlus, fum) {
         this.id = id;
         this.player = player;
         this.team = team;
@@ -14,6 +14,7 @@ module.exports = class Stat {
         this.ydsG = ydsG;
         this.td = td;
         this.lng = lng;
+        this.isTd = isTd;
         this.first = first;
         this.firstPerc = firstPerc;
         this.twentyPlus = twentyPlus;
@@ -25,27 +26,27 @@ module.exports = class Stat {
             const res = await db.query('SELECT * FROM RushingYards', null);
             return res.rows.map((stat) => this.mapToModel(stat));
         } catch (err) {
-            console.log(err.stack);
+            throw new Error(err.message);
         }
     }
 
-    static async findById(id, cb) {
+    static async findById(id) {
         const query = `SELECT * FROM RushingYards WHERE id = $1`
         try {
             const res = await db.query(query, [id]);
             return res.rows.map((stat) => this.mapToModel(stat));
         } catch (err) {
-            console.log(err.stack);
+            throw new Error(err.message);
         }
     }
 
-    static async fetchWithFilters(filters, cb) {
+    static async fetchWithFilters(filters) {
         const query = DBUtil.buildQuery(`SELECT * FROM RushingYards`, filters)
         try {
             const res = await db.query(query, null);
             return res.rows.map((stat) => this.mapToModel(stat));
         } catch (err) {
-            console.log(err.stack);
+            throw new Error(err.message);
         }
     }
 
@@ -54,7 +55,7 @@ module.exports = class Stat {
             const res = await db.query('SELECT DISTINCT team FROM RushingYards ORDER BY team ASC', null);
             return res.rows.map((team) => { return team.team });
         } catch (err) {
-            console.log(err.stack);
+            throw new Error(err.message);
         }
     }
 
@@ -63,7 +64,7 @@ module.exports = class Stat {
             const res = await db.query('SELECT DISTINCT pos FROM RushingYards ORDER BY pos ASC', null);
             return res.rows.map((pos) => { return pos.pos });
         } catch (err) {
-            console.log(err.stack);
+            throw new Error(err.message);
         }
     }
 
@@ -80,6 +81,7 @@ module.exports = class Stat {
             ydsG: stat.yds_g,
             td: stat.td,
             lng: stat.lng,
+            isTd: stat.is_td,
             first: stat.first,
             firstPerc: stat.first_perc,
             twentyPlus: stat.twenty_plus,

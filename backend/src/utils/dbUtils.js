@@ -1,16 +1,18 @@
 module.exports = class DBUtil {
     static buildQuery(query, params) {
+        let queryArgs = [];
         const paramsList = Object.entries(params)
         if (paramsList.length > 0) {
-            query += ' WHERE '
-            var paramsCount = 1
             for (const [key, value] of paramsList) {
-                query += `${key} ${value}`
-                if (paramsCount != paramsList.length) {
-                    query += ' AND '
+                if (value.constructor === Array) {
+                    value.forEach((arrayVal => {
+                        queryArgs.push(`${key} ${arrayVal}`);
+                    }));
+                } else {
+                    queryArgs.push(`${key} ${value}`);
                 }
-                paramsCount += 1
             }
+            query += ` WHERE ${queryArgs.join(" AND ")}`;
         }
         return query
     }

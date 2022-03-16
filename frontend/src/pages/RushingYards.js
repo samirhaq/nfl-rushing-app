@@ -17,6 +17,7 @@ import {
   TablePagination
 } from '@mui/material';
 // components
+import Label from '../components/Label';
 import Page from '../components/Page';
 import Scrollbar from '../components/Scrollbar';
 import Iconify from '../components/Iconify';
@@ -45,6 +46,8 @@ const TABLE_HEAD = [
   { id: '' }
 ];
 
+const nonStats = ['player', 'team', 'pos'];
+
 // ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
@@ -57,7 +60,22 @@ function descendingComparator(a, b, orderBy) {
   return 0;
 }
 
+function descendingNumericComparator(a, b, orderBy) {
+  if (Number(b[orderBy]) > Number(a[orderBy])) {
+    return -1;
+  }
+  if (Number(b[orderBy]) < Number(a[orderBy])) {
+    return 1;
+  }
+  return 0;
+}
+
 function getComparator(order, orderBy) {
+  if (!nonStats.includes(orderBy)) {
+    return order === 'desc'
+      ? (a, b) => descendingNumericComparator(a, b, orderBy)
+      : (a, b) => -descendingNumericComparator(a, b, orderBy);
+  }
   return order === 'desc'
     ? (a, b) => descendingComparator(a, b, orderBy)
     : (a, b) => -descendingComparator(a, b, orderBy);
@@ -149,12 +167,13 @@ export default function RushingYards() {
 
   const handleFilterByName = (event) => {
     setFilterName(event.target.value);
+    setPage(0);
   };
 
   const getAPI = () => {
     let url = '';
     if (filters.length > 0) {
-      url = `http://localhost:8080/stats?`;
+      url = `http://localhost:8000/stats?`;
       filters.map((filter) => {
         const dbField = filter.field.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
         url += `${dbField}=${filter.operation}${filter.value}&`;
@@ -162,7 +181,7 @@ export default function RushingYards() {
       });
       url = url.substring(0, url.length - 1);
     } else {
-      url = 'http://localhost:8080/stats';
+      url = 'http://localhost:8000/stats';
     }
 
     fetch(url)
@@ -237,6 +256,7 @@ export default function RushingYards() {
                         ydsG,
                         td,
                         lng,
+                        isTd,
                         first,
                         firstPerc,
                         twentyPlus,
@@ -261,7 +281,15 @@ export default function RushingYards() {
                           <TableCell align="right">{avg}</TableCell>
                           <TableCell align="right">{ydsG}</TableCell>
                           <TableCell align="right">{td}</TableCell>
-                          <TableCell align="right">{lng}</TableCell>
+                          <TableCell align="right">
+                            {isTd ? (
+                              <Label align="right" variant="ghost" color="success">
+                                {lng}
+                              </Label>
+                            ) : (
+                              lng
+                            )}
+                          </TableCell>
                           <TableCell align="right">{first}</TableCell>
                           <TableCell align="right">{firstPerc}</TableCell>
                           <TableCell align="right">{twentyPlus}</TableCell>
