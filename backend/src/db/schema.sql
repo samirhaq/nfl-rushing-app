@@ -1,3 +1,6 @@
+-- Drop our table if it exists already
+DROP TABLE IF EXISTS RushingYards;
+
 -- Create our table if it doesn't already exist
 CREATE TABLE IF NOT EXISTS RushingYards
 (

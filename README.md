@@ -60,7 +60,7 @@ To initialize db and import data
 1. `yarn migrate`
 2. Will be prompted for password, it is included in `/backend/.env` in `PGPASSWORD` variable
 
-If you want to import new data, upload to `src/db/data` and run steps to initialize again. Make sure it is in the correct format or it will not import
+If you want to import new set of data, upload to `src/db/data` and run steps to initialize again. Make sure it is in the correct format or it will not import
 
 To run app make sure docker is installed:
 1. Run `docker-compose up --build`
