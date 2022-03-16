@@ -54,11 +54,11 @@ We will evaluate you on your ability to solve the problem defined in the require
 If you have any questions regarding requirements, do not hesitate to email your contact at theScore for clarification.
 
 ### Installation and running this solution
-The db is hosted on pgAdmin as a cloud DB
+The db is hosted on pgAdmin as a cloud DB. Before running app, our table must be created
 
-To initialize db
+To initialize db and import data
 1. `yarn migrate`
-2. Will be prompted for password, it is included in `/backend/.env` under `PGPASSWORD` variable
+2. Will be prompted for password, it is included in `/backend/.env` in `PGPASSWORD` variable
 
 If you want to import new data, upload to `src/db/data` and run steps to initialize again. Make sure it is in the correct format or it will not import
 
